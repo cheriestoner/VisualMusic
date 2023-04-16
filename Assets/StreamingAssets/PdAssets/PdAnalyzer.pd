@@ -1,0 +1,200 @@
+#N canvas 599 129 1330 744 12;
+#X declare -lib timbreIDLib;
+#X obj 254 39 adc~;
+#X obj 479 115 metro 100;
+#N canvas 0 50 450 250 (subpatch) 0;
+#X array Envelope 100 float 5;
+#A 0 -0.00488884 0.00336869 0.00057683 0.00599452 0.00766803 0.00869918
+0.0100075 0.0118884 0.0134233 0.0140166 0.015198 0.0127301 0.00971304
+0.00796995 0.00415333 0.0025347 0.00336614 -0.00185601 -0.00243382
+0.00032067 -0.00754739 -0.00708979 -0.00724507 -0.00890448 -0.00599935
+-0.0122108 -0.0056078 -0.00971379 -0.00950142 -0.00899092 -0.00879253
+-0.0119164 -0.0122524 -0.00956212 -0.00964698 -0.0142544 -0.0121178
+-0.0145538 -0.0193464 -0.0140712 -0.0158533 -0.0203083 -0.0192288 -0.0175679
+-0.0189595 -0.0194119 -0.0180413 -0.0197165 -0.0180324 -0.0242287 -0.0233419
+-0.0276014 -0.0257264 -0.0278129 -0.0295467 -0.0218843 -0.0240475 -0.022538
+-0.0201547 -0.015409 -0.0134843 -0.00979124 -0.00678402 -0.00595605
+-0.00544786 -0.000123049 0.00417603 0.00445476 0.00653692 0.00977787
+0.00781494 0.00589542 0.00854445 0.00902031 0.00767392 0.0123913 0.0112676
+0.0162023 0.0167989 0.0194919 0.0206126 0.0204985 0.0224963 0.0235407
+0.0254636 0.0267361 0.0258643 0.0262158 0.025349 0.0235934 0.0233832
+0.0228729 0.0235781 0.0239626 0.0261455 0.0231464 0.0232294 0.0193852
+0.0195479 0.0181958;
+#X coords 0 1 99 -1 200 140 1 0 0;
+#X restore 620 31 graph;
+#X obj 423 69 *~ 10;
+#X obj 479 80 loadbang;
+#X floatatom 365 323 5 0 0 2 Pitch - - 0;
+#X obj 110 280 bonk~;
+#X msg 33 77 \; pd dsp 1;
+#X obj 33 33 loadbang;
+#X obj 302 131 lop~ 4000;
+#X floatatom 158 365 5 0 0 0 Template\ number - - 0;
+#X floatatom 198 391 5 0 0 0 Velocity - - 0;
+#X floatatom 239 416 5 0 0 0 "Spectral\ centroid" - - 0;
+#X obj 158 341 unpack f f f;
+#X obj 110 304 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X text 372 256 todo: how to filter out background noise;
+#X floatatom 482 321 5 0 0 2 Sound\ Level(db) - - 0;
+#X floatatom 600 321 5 0 0 2 Note - - 0;
+#X obj 1079 51 openpanel;
+#X obj 1079 289 output~;
+#X obj 190 29 r~ test;
+#X obj 1079 31 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 479 148 tabwrite~ Envelope;
+#X symbolatom 1079 75 26 0 0 0 - - - 0;
+#X obj 239 476 s SpecCentroid;
+#X obj 249 571 env~;
+#X msg 36 251 minvel \$1;
+#X obj 39 219 hsl 60 15 0 127 0 0 empty empty empty -2 -8 0 10 #fcfcfc
+#000000 #000000 0 1;
+#X text 72 497 todo: low pass filter or moving avrage;
+#X obj 242 153 s~ sig;
+#X obj 422 35 r~ sig;
+#X obj 110 206 r~ sig;
+#X obj 364 231 r~ sig;
+#X obj 71 341 s OnsetBang;
+#X obj 1079 203 soundfiler;
+#N canvas 303 295 450 250 (subpatch) 0;
+#X array arraytest 782091 float 4;
+#X coords 0 1 782090 -1 200 140 1;
+#X restore 1079 395 graph;
+#X msg 1079 179 read -resize \$1 arraytest;
+#X obj 1010 296 s~ test;
+#X obj 1079 254 tabplay~ arraytest;
+#X obj 1202 278 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 1079 229 bang;
+#X obj 242 80 hip~ 80;
+#X obj 242 105 hip~ 80;
+#X obj 1079 131 loadbang;
+#X obj 36 165 loadbang;
+#X obj 198 438 s Velocity;
+#X obj 222 277 attackTime~ 4096;
+#X floatatom 222 303 5 0 0 0 - - - 0;
+#X obj 249 547 r~ sig;
+#X floatatom 249 616 7 0 0 0 - - - 0;
+#X obj 249 638 s RawEnv;
+#X obj 249 594 dbtorms;
+#N canvas 313 444 450 300 Counter 0;
+#X obj 51 24 inlet;
+#X obj 63 144 f 0;
+#X obj 64 180 + 1;
+#X obj 99 144 mod \$1;
+#X msg 75 108 0;
+#X obj 41 246 outlet;
+#X obj 44 66 route reset;
+#X msg 13 109 bang;
+#X obj 161 20 inlet;
+#X connect 0 0 6 0;
+#X connect 1 0 2 0;
+#X connect 1 0 5 0;
+#X connect 2 0 3 0;
+#X connect 3 0 1 1;
+#X connect 4 0 1 1;
+#X connect 6 0 4 0;
+#X connect 6 1 7 0;
+#X connect 7 0 1 0;
+#X connect 8 0 3 1;
+#X restore 486 652 pd Counter;
+#X obj 469 621 bng 15 250 50 0 empty empty empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X floatatom 572 625 5 0 0 0 - - - 0;
+#X floatatom 486 676 5 0 0 0 - - - 0;
+#X msg 574 598 1000;
+#X obj 670 649 declare -lib timbreIDLib;
+#X floatatom 195 593 5 0 0 0 - - - 0;
+#X obj 118 257 bng 15 250 50 0 empty note empty 17 7 0 10 #fcfcfc #000000
+#000000;
+#X obj 375 599 < 0.001;
+#X obj 381 627 tgl 15 0 empty empty empty 17 7 0 10 #fcfcfc #000000
+#000000 0 1;
+#X msg 1079 155 symbol f2_dona_straight.wav;
+#X obj 365 279 sigmund~ -npts 2048 -hop 512 pitch env notes;
+#X obj 154 311 s Onset;
+#X obj 600 386 s note;
+#X obj 423 393 pack f f;
+#X obj 423 420 s PitchAmp;
+#X msg 36 190 60;
+#X floatatom 365 396 5 0 0 0 - - - 0;
+#X obj 365 371 int;
+#X obj 365 348 + 0.49999;
+#X obj 834 448 oscparse;
+#X obj 874 514 route test;
+#X obj 874 541 print;
+#X obj 834 474 list trim;
+#X text 741 424 for testing;
+#X obj 834 357 loadbang;
+#X obj 834 422 netreceive -u -b;
+#X floatatom 734 540 5 0 0 0 - - - 0;
+#X obj 734 516 route attack;
+#X msg 834 383 listen 6969;
+#X connect 0 0 41 0;
+#X connect 1 0 22 0;
+#X connect 3 0 22 0;
+#X connect 4 0 1 0;
+#X connect 5 0 66 0;
+#X connect 5 0 71 0;
+#X connect 6 0 14 0;
+#X connect 6 1 13 0;
+#X connect 6 1 64 0;
+#X connect 8 0 7 0;
+#X connect 11 0 45 0;
+#X connect 12 0 24 0;
+#X connect 13 0 10 0;
+#X connect 13 1 11 0;
+#X connect 13 2 12 0;
+#X connect 14 0 33 0;
+#X connect 14 0 46 0;
+#X connect 16 0 66 1;
+#X connect 17 0 65 0;
+#X connect 18 0 23 0;
+#X connect 21 0 18 0;
+#X connect 25 0 51 0;
+#X connect 25 0 58 0;
+#X connect 26 0 6 0;
+#X connect 27 0 26 0;
+#X connect 30 0 3 0;
+#X connect 31 0 6 0;
+#X connect 32 0 46 0;
+#X connect 32 0 63 0;
+#X connect 34 0 40 0;
+#X connect 36 0 34 0;
+#X connect 38 0 37 0;
+#X connect 38 0 19 0;
+#X connect 38 0 19 1;
+#X connect 38 1 39 0;
+#X connect 39 0 62 0;
+#X connect 40 0 38 0;
+#X connect 41 0 42 0;
+#X connect 42 0 29 0;
+#X connect 43 0 62 0;
+#X connect 44 0 68 0;
+#X connect 46 0 47 0;
+#X connect 48 0 25 0;
+#X connect 49 0 50 0;
+#X connect 49 0 60 0;
+#X connect 51 0 49 0;
+#X connect 52 0 55 0;
+#X connect 53 0 52 0;
+#X connect 54 0 52 1;
+#X connect 56 0 54 0;
+#X connect 59 0 6 0;
+#X connect 60 0 61 0;
+#X connect 62 0 36 0;
+#X connect 63 0 5 0;
+#X connect 63 1 16 0;
+#X connect 63 2 17 0;
+#X connect 66 0 67 0;
+#X connect 68 0 27 0;
+#X connect 70 0 69 0;
+#X connect 71 0 70 0;
+#X connect 72 0 75 0;
+#X connect 73 0 74 0;
+#X connect 75 0 73 0;
+#X connect 75 0 80 0;
+#X connect 77 0 81 0;
+#X connect 78 0 72 0;
+#X connect 80 0 79 0;
