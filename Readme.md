@@ -13,5 +13,5 @@ Download the standalone that suits your OS
 
 Download the PD patch
 
-Run both the Unity standalone and the PD patch ans sing!
+Run both the Unity standalone and the PD patch and sing!
 
